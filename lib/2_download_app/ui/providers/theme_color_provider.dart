@@ -20,4 +20,3 @@ class ThemeColorProvider extends ChangeNotifier {
   }
 }
 
-final themeProvider = ThemeColorProvider();

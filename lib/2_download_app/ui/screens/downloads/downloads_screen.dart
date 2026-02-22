@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:w4_flutter_practice/2_download_app/ui/screens/downloads/widgets/download_tile.dart';
 import '../../providers/theme_color_provider.dart';
 import '../../theme/theme.dart';
@@ -23,46 +24,43 @@ class DownloadsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: themeProvider,
-      builder: (context, child) {
-        final currentThemeColor = themeProvider.currentThemeColor;
-        return Container(
-          color: currentThemeColor.backgroundColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 16),
-              Text(
-                "Downloads",
-                style: AppTextStyles.heading.copyWith(
-                  color: currentThemeColor.color,
-                ),
-              ),
-
-              SizedBox(height: 50),
-
-              // TODO - Add the Download tiles
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ListView.separated(
-                    itemCount: ressources.length,
-                    itemBuilder: (context, index) {
-                      final controller = controllers[index];
-
-                      return DownloadTile(controller: controller);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 20);
-                    },
-                  ),
-                ),
-              ),
-            ],
+    ThemeColorProvider themeProvider = context.read<ThemeColorProvider>();
+    final currentThemeColor = themeProvider.currentThemeColor;
+    return Container(
+      color: currentThemeColor.backgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 16),
+          Text(
+            "Downloads",
+            style: AppTextStyles.heading.copyWith(
+              color: currentThemeColor.color,
+            ),
           ),
-        );
-      },
+
+          SizedBox(height: 50),
+
+          // TODO - Add the Download tiles
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ListView.separated(
+                itemCount: ressources.length,
+                itemBuilder: (context, index) {
+                  return ChangeNotifierProvider<DownloadController>(
+                    create: (context) => DownloadController(ressources[index]),
+                    child: DownloadTile(),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 20);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

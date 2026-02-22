@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'ui/providers/theme_color_provider.dart';
 import 'ui/screens/settings/settings_screen.dart';
 import 'ui/screens/downloads/downloads_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider<ThemeColorProvider>(
+      create: (context) => ThemeColorProvider(),
+      builder: (context, child) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -19,10 +24,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 1;
 
-  final List<Widget> _pages =  [DownloadsScreen(), SettingsScreen()];
+  final List<Widget> _pages = [DownloadsScreen(), SettingsScreen()];
 
   @override
   Widget build(BuildContext context) {
+    ThemeColorProvider themeProvider = context.watch<ThemeColorProvider>();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
