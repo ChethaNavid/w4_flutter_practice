@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Provider<ColorService>(
-        create: (context) => ColorService(),
-        builder: (context, child) => Scaffold(body: Home()),
+    ChangeNotifierProvider<ColorService>(
+      create: (context) => ColorService(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Home(),
       ),
     ),
   );
@@ -70,27 +70,22 @@ class ColorTapsScreen extends StatelessWidget {
   const ColorTapsScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    ColorService colorService = context.read<ColorService>();
+    ColorService colorService = context.watch<ColorService>();
     return Scaffold(
       appBar: AppBar(title: Text('Color Taps')),
-      body: ListenableBuilder(
-        listenable: colorService,
-        builder: (context, child) {
-          return Column(
-            children: [
-              ColorTap(
-                type: CardType.red,
-                tapCount: colorService.redTapCount,
-                onTap: colorService.onRedTab,
-              ),
-              ColorTap(
-                type: CardType.blue,
-                tapCount: colorService.blueTapCount,
-                onTap: colorService.onBlueTap,
-              ),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          ColorTap(
+            type: CardType.red,
+            tapCount: colorService.redTapCount,
+            onTap: colorService.onRedTab,
+          ),
+          ColorTap(
+            type: CardType.blue,
+            tapCount: colorService.blueTapCount,
+            onTap: colorService.onBlueTap,
+          ),
+        ],
       ),
     );
   }
@@ -138,28 +133,23 @@ class StatisticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ColorService colorService = context.read<ColorService>();
+    ColorService colorService = context.watch<ColorService>();
     return Scaffold(
       appBar: AppBar(title: Text('Statistics')),
-      body: ListenableBuilder(
-        listenable: colorService,
-        builder: (context, child) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Red Taps: ${colorService.redTapCount}',
-                  style: TextStyle(fontSize: 24),
-                ),
-                Text(
-                  'Blue Taps: ${colorService.blueTapCount}',
-                  style: TextStyle(fontSize: 24),
-                ),
-              ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Red Taps: ${colorService.redTapCount}',
+              style: TextStyle(fontSize: 24),
             ),
-          );
-        },
+            Text(
+              'Blue Taps: ${colorService.blueTapCount}',
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
       ),
     );
   }
