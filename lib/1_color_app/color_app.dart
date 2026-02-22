@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Home()),
+      home: Provider<ColorService>(
+        create: (context) => ColorService(),
+        builder: (context, child) => Scaffold(body: Home()),
+      ),
     ),
   );
 }
@@ -23,8 +27,6 @@ class ColorService extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-final colorService = ColorService();
 
 enum CardType { red, blue }
 
@@ -68,6 +70,7 @@ class ColorTapsScreen extends StatelessWidget {
   const ColorTapsScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    ColorService colorService = context.read<ColorService>();
     return Scaffold(
       appBar: AppBar(title: Text('Color Taps')),
       body: ListenableBuilder(
@@ -135,6 +138,7 @@ class StatisticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorService colorService = context.read<ColorService>();
     return Scaffold(
       appBar: AppBar(title: Text('Statistics')),
       body: ListenableBuilder(
